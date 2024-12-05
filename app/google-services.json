@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "958980567070",
+    "project_id": "stitchwell-fe6c1",
+    "storage_bucket": "stitchwell-fe6c1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958980567070:android:735803f889561b6a19fe0f",
+        "android_client_info": {
+          "package_name": "com.zhair.stitchwell"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFeCQ8b5He7iBGhL8KR1_1Q9nPtP-lAzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
