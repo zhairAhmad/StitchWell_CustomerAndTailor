@@ -8,5 +8,9 @@
         <!-- ... other theme attributes ... -->
         <item name="android:fontFamily">@font/poppins_medium</item>
     </style>
+    <style name="ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
     <style name="Theme.StitchWell" parent="Base.Theme.StitchWell" />
 </resources>

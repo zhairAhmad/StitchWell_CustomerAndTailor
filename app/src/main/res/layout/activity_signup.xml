@@ -97,7 +97,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:background="#F5F5F5"
@@ -127,7 +127,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="30dp"
@@ -158,7 +158,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phone"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="30dp"

@@ -51,6 +51,10 @@ class Login : AppCompatActivity() {
             startActivity(Intent(this,signup::class.java))
             finish()
         }
+        binding.forget.setOnClickListener {
+            startActivity(Intent(this,forgetPassword::class.java))
+            finish()
+        }
         binding.loginbtn.setOnClickListener {
             val email=binding.name.editText?.text.toString()
             val password=binding.password.editText?.text.toString()
@@ -63,14 +67,13 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
             if(password.length<6){
-                Toast.makeText(this,"Password must be atleast 6 characters",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Password must be at least 6 characters",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             progressDialog.show()
 
             viewModel.login(email,password)
-
         }
 
     }

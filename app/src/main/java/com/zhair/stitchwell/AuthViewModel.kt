@@ -17,28 +17,6 @@ class AuthViewModel:ViewModel() {
     val failureMessage = MutableStateFlow<String?>(null)
     val resetResponse = MutableStateFlow<Boolean?>(null)
 
-//    fun login(email: String, password: String) {
-//
-//        viewModelScope.launch {
-//            val result = AuthRepository.login(email, password)
-//            if (result.isSuccess) {
-//                currentUser.value = result.getOrThrow()
-//            } else {
-//                failureMessage.value = result.exceptionOrNull()?.message
-//            }
-//        }
-//    }
-fun login(email:String,password:String){
-    viewModelScope.launch {
-        val result=AuthRepository.login(email,password)
-        if (result.isSuccess){
-            currentUser.value=result.getOrThrow()
-        }else{
-            failureMessage.value=result.exceptionOrNull()?.message
-        }
-    }
-}
-
     fun resetPassword(email:String){
         viewModelScope.launch {
             val result=AuthRepository.resetPassword(email)
@@ -49,6 +27,17 @@ fun login(email:String,password:String){
             }
         }
     }
+    suspend fun Logout(){
+        val result=AuthRepository.logout()
+        if (result.isSuccess){
+            currentUser.value=null
+        }else{
+            failureMessage.value=result.exceptionOrNull()?.message
+    }
+
+
+    }
+
     fun signUp(name: String, email: String, phone: String, password: String) {
         viewModelScope.launch {
             val result = AuthRepository.signup(name, email, phone, password,)
@@ -59,11 +48,18 @@ fun login(email:String,password:String){
             }
         }
     }
-
     fun checkUser(){
         currentUser.value=AuthRepository.getCurrentUser()
     }
-//fun getCurrentUser():FirebaseUser?{
-//    return FirebaseAuth.getInstance().currentUser
-//}
+    fun login(email:String,password:String){
+        viewModelScope.launch {
+            val result=AuthRepository.login(email,password)
+            if (result.isSuccess){
+                currentUser.value=result.getOrThrow()
+            }else{
+                failureMessage.value=result.exceptionOrNull()?.message
+            }
+        }
+    }
+
 }
