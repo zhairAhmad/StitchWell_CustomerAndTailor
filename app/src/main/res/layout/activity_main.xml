@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -12,6 +13,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarLayout"
@@ -48,8 +60,8 @@
 
                     <ImageView
                         android:id="@+id/logomain"
-                        android:layout_width="250dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="230dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="50dp"
                         android:src="@drawable/logo_horizontal"
@@ -89,17 +101,21 @@
 
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"
+
         android:layout_height="60dp"
-        app:itemPaddingTop="10dp"
-        app:itemPaddingBottom="10dp"
         android:layout_marginBottom="1dp"
+
+        app:itemActiveIndicatorStyle="@style/ActiveIndicator"
+        app:itemIconTint="@color/bottom_nav_color"
+
+        app:itemPaddingBottom="10dp"
+        app:itemPaddingTop="10dp"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom_nav"
-        app:labelVisibilityMode="labeled"
-        app:itemActiveIndicatorStyle="@style/ActiveIndicator"
-        />
+        app:menu="@menu/menu_bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

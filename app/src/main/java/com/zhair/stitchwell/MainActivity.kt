@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val floatingBtn = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        floatingBtn.setOnClickListener {
+            val intent = Intent(this, Add_Order::class.java)
+            startActivity(intent)
+        }
+
         val viewModel = AuthViewModel()
         viewModel.checkUser()
 
@@ -54,6 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val viewModel=AuthViewModel()

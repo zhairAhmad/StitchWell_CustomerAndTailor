@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.oAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -51,6 +52,19 @@ class AuthViewModel:ViewModel() {
     fun checkUser(){
         currentUser.value=AuthRepository.getCurrentUser()
     }
+
+    fun loadUser(){
+        viewModelScope.launch {
+            val result=AuthRepository.loadUser()
+            if (result.isSuccess){
+                currentUser.value=result.getOrThrow()
+//                Log.i("test1",currentUser.value.toString())
+            }else{
+                failureMessage.value=result.exceptionOrNull()?.message
+            }
+        }
+    }
+
     fun login(email:String,password:String){
         viewModelScope.launch {
             val result=AuthRepository.login(email,password)
