@@ -12,7 +12,7 @@ class AuthRepositories {
     val UserCollection = FirebaseFirestore.getInstance().collection("users")
 
     suspend fun logout():Result<Boolean>{
-
+        FirebaseAuth.getInstance().signOut()
         return Result.success(true)
     }
 

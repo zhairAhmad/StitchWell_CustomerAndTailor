@@ -24,7 +24,7 @@ class Login : AppCompatActivity() {
 
         viewModel=AuthViewModel()
         viewModel.checkUser()
-//          viewModel.getCurrentUser()
+//         viewModel.getCurrentUser()
         progressDialog=ProgressDialog(this)
         progressDialog.setMessage("Please wait while we check your credentials...")
         progressDialog.setCancelable(false)
@@ -42,6 +42,7 @@ class Login : AppCompatActivity() {
                 if (it!=null){
                     progressDialog.dismiss()
                     startActivity(Intent(this@Login, MainActivity::class.java))
+                    viewModel.loadUser()
                     finish()
                 }
             }

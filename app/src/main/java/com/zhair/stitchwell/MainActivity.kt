@@ -19,9 +19,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        var user: Users? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,9 +36,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val intent = Intent(this, Add_Order::class.java)
             startActivity(intent)
         }
-
-        val viewModel = AuthViewModel()
-        viewModel.checkUser()
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -57,7 +59,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         val bottomNavigationView = findViewById<BottomNavigationView>(
-            R.id.bottomNavigation)
+            R.id.bottomNavigation
+        )
         bottomNavigationView.setupWithNavController(navHostFragment.navController)
 
 
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val viewModel=AuthViewModel()
+        val viewModel = AuthViewModel()
         when (item.itemId) {
             R.id.item_logout -> {
                 lifecycleScope.launch { // Launch a coroutine
@@ -74,13 +77,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     finish()
                 }
             }
+
             R.id.item_about -> {
                 // Navigate to home screen (replace with your actual navigation logic)
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
             }
             // Add cases for other navigation items if needed
         }
-       // Close the drawer
+        // Close the drawer
         return true
     }
 

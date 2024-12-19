@@ -10,9 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.coderobust.handcraftsshop.ui.main.home.HomeFragmentViewModel
+import com.zhair.stitchwell.MainActivity.Companion.user
 import com.zhair.stitchwell.databinding.FragmentHomeBinding
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 
 
@@ -45,6 +44,9 @@ class HomeFragment : Fragment() {
                 it?.let {
                     Log.i("test2", it.phone.toString())
                     CurrentUser = it
+                    user=it
+                    viewModel.readOrders()
+
                 }
             }
         }
@@ -55,7 +57,8 @@ class HomeFragment : Fragment() {
         binding.recyclerview.layoutManager= LinearLayoutManager(context)
 
         viewModel= HomeFragmentViewModel()
-        viewModel.readOrders()
+//        viewModel.readOrders()
+//        viewModel.readHandcrafts()
         lifecycleScope.launch {
             viewModel.failureMessage.collect {
                 it?.let {
@@ -68,12 +71,12 @@ class HomeFragment : Fragment() {
             viewModel.data.collect {
                 it?.let {
                     Log.d("test1", it.firstOrNull()!!.phoneNumber.toString())
-                    val filteredItems = it.filter { order ->
-                        order.phoneNumber == CurrentUser.phone
-                    }
-                    Log.i("test1", CurrentUser.phone.toString())
+//                    val filteredItems = it.filter { order ->
+//                        order.phoneNumber == CurrentUser.phone
+//                    }
+//                    Log.i("test1", CurrentUser.phone.toString())
                     items.clear()
-                    items.addAll(filteredItems)
+                    items.addAll(it)
                     adapter.notifyDataSetChanged()
                 }
             }

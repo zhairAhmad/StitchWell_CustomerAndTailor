@@ -44,6 +44,7 @@ class AuthViewModel:ViewModel() {
             val result = AuthRepository.signup(name, email, phone, password,)
             if (result.isSuccess) {
                 currentUser.value = result.getOrThrow()
+                MainActivity.user=result.getOrThrow()
             } else {
                 failureMessage.value = result.exceptionOrNull()?.message
             }
@@ -69,7 +70,13 @@ class AuthViewModel:ViewModel() {
         viewModelScope.launch {
             val result=AuthRepository.login(email,password)
             if (result.isSuccess){
-                currentUser.value=result.getOrThrow()
+                val result2=AuthRepository.loadUser()
+                if (result2.isSuccess){
+                    MainActivity.user=result2.getOrThrow()
+                    currentUser.value=result2.getOrThrow()
+                }else{
+                    failureMessage.value=result2.exceptionOrNull()?.message
+                }
             }else{
                 failureMessage.value=result.exceptionOrNull()?.message
             }

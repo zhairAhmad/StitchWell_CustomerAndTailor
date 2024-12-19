@@ -1,7 +1,8 @@
-package com.coderobust.handcraftsshop.ui.main.home
+package com.zhair.stitchwell
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zhair.stitchwell.MainActivity
 import com.zhair.stitchwell.Order
 import com.zhair.stitchwell.OrderRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,16 +11,20 @@ import kotlinx.coroutines.launch
 
 class HomeFragmentViewModel : ViewModel() {
     val orderRepository = OrderRepository()
+
     val failureMessage = MutableStateFlow<String?>(null)
     val data = MutableStateFlow<List<Order>?>(null)
 
     init {
-        readOrders()
+//        readOrders()
+//        readHandcrafts
+
     }
+
 
     fun readOrders() {
         viewModelScope.launch {
-            orderRepository.getOrders().catch {
+            orderRepository.getOrdersOfUser(MainActivity.user?.phone!!).catch {
                 failureMessage.value = it.message
             }
                 .collect {
@@ -27,4 +32,14 @@ class HomeFragmentViewModel : ViewModel() {
                 }
         }
     }
+//fun readHandcrafts() {
+//    viewModelScope.launch {
+//        orderRepository.getOrders().catch {
+//            failureMessage.value = it.message
+//        }
+//            .collect {
+//                data.value = it
+//            }
+//    }
+//}
 }

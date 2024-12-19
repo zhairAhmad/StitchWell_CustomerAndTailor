@@ -22,4 +22,6 @@ class OrderRepository {
 
     fun getOrders() =
         orderCollection.snapshots().map { it.toObjects(Order::class.java) }
+    fun getOrdersOfUser(phoneNumber: String) =
+        orderCollection.whereEqualTo("phoneNumber",phoneNumber).whereEqualTo("status", "Pending").snapshots().map { it.toObjects(Order::class.java) }
 }
