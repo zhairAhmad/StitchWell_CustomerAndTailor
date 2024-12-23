@@ -9,22 +9,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PendingFragmentViewModel : ViewModel() {
+class CompletedFragmentViewModel : ViewModel() {
     private val orderRepository = OrderRepository()
 
     val failureMessage = MutableStateFlow<String?>(null)
     val data = MutableStateFlow<List<Order>?>(null)
 
-    init {
-//        readOrders()
-//        readHandcrafts
 
-    }
 
 
     fun readOrders() {
         viewModelScope.launch {
-            orderRepository.getOrdersOfUserPending(MainActivity.user?.phone!!).catch {
+            orderRepository.getOrdersOfUserCompleted(MainActivity.user?.phone!!).catch {
                 failureMessage.value = it.message
             }
                 .collect {
@@ -32,4 +28,14 @@ class PendingFragmentViewModel : ViewModel() {
                 }
         }
     }
+//fun readHandcrafts() {
+//    viewModelScope.launch {
+//        orderRepository.getOrders().catch {
+//            failureMessage.value = it.message
+//        }
+//            .collect {
+//                data.value = it
+//            }
+//    }
+//}
 }

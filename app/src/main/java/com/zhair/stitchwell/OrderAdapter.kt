@@ -4,6 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.zhair.stitchwell.DetailsOfOrder
 import com.zhair.stitchwell.Order
 import com.zhair.stitchwell.OrderViewHolder
 import com.zhair.stitchwell.Size
@@ -50,27 +52,11 @@ class OrderAdapter(val items: ArrayList<Order>) : RecyclerView.Adapter<OrderView
 
 
 
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(context, edit_size::class.java)
-//            intent.putExtra("sizeId", item.id)
-//            intent.putExtra("name", item.name)
-//            intent.putExtra("number", item.phone)
-//            intent.putExtra("collar", item.collar)
-//            intent.putExtra("length", item.length)
-//            intent.putExtra("waist", item.waist)
-//            intent.putExtra("shoulder", item.shoulder)
-//            intent.putExtra("sleeve", item.sleeve)
-//            intent.putExtra("chest", item.chest)
-//            intent.putExtra("type", item.type)
-//            intent.putExtra("cuff", item.cuff)
-//            intent.putExtra("length1", item.length1)
-//            intent.putExtra("bottom", item.bottom)
-//            intent.putExtra("kunda", item.kunda)
-//            intent.putExtra("legs", item.legs)
-//            intent.putExtra("asan", item.asan)
-//            Log.i("gettt", item.asan.toString())
-//            holder.itemView.context.startActivity(intent)
-//        }
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, DetailsOfOrder::class.java)
+            intent.putExtra("data", Gson().toJson(item))
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     // Update the list of sizes with new data and refresh the RecyclerView

@@ -1,6 +1,7 @@
 package com.zhair.stitchwell
 
 import OrderAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -34,9 +35,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            authViewModel=AuthViewModel()
-            CurrentUser=Users("","","","", "")
-            authViewModel.loadUser()
+        authViewModel=AuthViewModel()
+        CurrentUser=Users("","","","", "")
+        authViewModel.loadUser()
         Log.i("test1", "Test")
 
         lifecycleScope.launch {
@@ -46,12 +47,17 @@ class HomeFragment : Fragment() {
                     CurrentUser = it
                     user=it
                     viewModel.readOrders()
-
+                    if(!CurrentUser.role.equals("admin")){
+                        binding.floatingActionButton.visibility=View.GONE
+                    }
                 }
             }
         }
 
-
+        binding.floatingActionButton.setOnClickListener(){
+//          startActivity(Intent(this@HomeFragment, Add_Order::class.java))
+            startActivity(Intent(requireActivity(), Add_Order::class.java))
+        }
         adapter= OrderAdapter(items)
         binding.recyclerview.adapter=adapter
         binding.recyclerview.layoutManager= LinearLayoutManager(context)
