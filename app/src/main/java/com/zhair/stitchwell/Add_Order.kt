@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.zhair.stitchwell.databinding.ActivityAddOrderBinding
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import kotlin.text.format
 
 class Add_Order : AppCompatActivity() {
     lateinit var progressDialog:ProgressDialog
@@ -52,6 +54,9 @@ class Add_Order : AppCompatActivity() {
                  }
              }
          }
+         binding.cancel.setOnClickListener(){
+             finish()
+         }
 
          binding.saveBtn.setOnClickListener {
 //            val status = binding.namee.editText?.text.toString()
@@ -72,15 +77,26 @@ class Add_Order : AppCompatActivity() {
             val kunda = binding.kunda.editText?.text.toString().toFloatOrNull() ?: 0f
             val legs = binding.legs.editText?.text.toString().toFloatOrNull() ?: 0f
             val asan = binding.asan.editText?.text.toString().toFloatOrNull() ?: 0f
+             val customerIntra = binding.namee.editText?.text.toString()
+             val price = binding.price.editText?.text.toString().toIntOrNull() ?: 0
+             
+             if(status.isEmpty() || delivaryDate.isEmpty() || phone.isEmpty() || collar == 0f || length == 0f || shoulder == 0f || waist == 0f || sleeve == 0f || chest == 0f || type.isEmpty() || cuff == 0f){
+                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+                 return@setOnClickListener
+             }
 
             val size = Size(collar, length, shoulder, waist, sleeve, chest, type, cuff, length1, bottom, kunda, legs, asan)
 
             // Create a Handcraft object with the entered data
              val order = Order()
             order.status = status
+             order.date= SimpleDateFormat("yyyy-MM-dd HH:mm a").format(System.currentTimeMillis())
+             order.customInstr= customerIntra
+             order.price = price
              order.expectedDate = delivaryDate
              order.phoneNumber = phone
              order.size = size
+
 
              viewModel.saveOrder(order)
              // Save the Handcraft object (this would be a database operation, Firestore, etc.)

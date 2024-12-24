@@ -32,13 +32,18 @@ class DetailsOfOrder : AppCompatActivity() {
         setContentView(binding.root)
         val user: Users = user!!
         var isAdmin = false
-        if (user.role.equals("admin"))
+        if (user.role.equals("Admin"))
             isAdmin = true
 
         order = Gson().fromJson(intent.getStringExtra("data"),Order::class.java)
 
         binding.namee.text=order.status
-        binding.number.text=order.expectedDate
+        binding.textView16.text=order.date
+        binding.textView30.text=order.customInstr
+        binding.textView32.text=order.tailorComment
+        binding.textView28.text=order.expectedDate
+        binding.textView7.text=order.price.toString()
+
         binding.collar.text=order.size?.collar.toString()
         binding.length.text=order.size?.length.toString()
         binding.waist.text=order.size?.waist.toString()
@@ -52,13 +57,15 @@ class DetailsOfOrder : AppCompatActivity() {
         binding.kunda.text=order.size?.kunda.toString()
         binding.length.text=order.size?.length.toString()
 
+        binding.name.editText!!.setText(order.tailorComment)
+
         progressDialog= ProgressDialog(this)
         progressDialog.setMessage("Updating the Order Status...Please Update")
         progressDialog.setCancelable(false)
         authViewModel= AuthViewModel()
         authViewModel.getTokenOf(order.phoneNumber!!)
 
-        binding.workStarted2.setOnClickListener(){
+        binding.workStarted.setOnClickListener(){
             progressDialog.show()
             order.status="Work Started"
             viewModel.updateOrder(order)
@@ -73,12 +80,26 @@ class DetailsOfOrder : AppCompatActivity() {
             order.status="Order Cancelled"
             viewModel.updateOrder(order)
         }
-        binding.workStarted2.visibility = View.GONE
+        binding.workStarted.visibility = View.GONE
         binding.completedd.visibility = View.GONE
         binding.cancelOrder.visibility = View.GONE
+        binding.name.visibility= View.GONE
+        binding.UpdateComment.visibility = View.GONE
+        if(isAdmin){
+            binding.name.visibility= View.VISIBLE
+            binding.UpdateComment.visibility = View.VISIBLE
+        }
+        binding.UpdateComment.setOnClickListener(){
+            progressDialog.show()
+            if(binding.name.editText!!.text.toString() != ""){
+                order.tailorComment=binding.name.editText!!.text.toString()
+                viewModel.updateOrder(order)
+            }
+
+        }
 
         if((isAdmin && order.status.equals("Pending")) || (isAdmin && order.status.equals("Order Cancelled"))){
-            binding.workStarted2.visibility = View.VISIBLE
+            binding.workStarted.visibility = View.VISIBLE
         }
 
         if(isAdmin && order.status.equals("Work Started")){

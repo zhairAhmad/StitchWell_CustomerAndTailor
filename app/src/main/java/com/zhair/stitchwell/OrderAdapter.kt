@@ -35,20 +35,26 @@ class OrderAdapter(val items: ArrayList<Order>) : RecyclerView.Adapter<OrderView
         Log.i("SizeAdapter", "onBindViewHolder")
         val item = sizes[position]
         holder.binding.namee.text = item.status
-        holder.binding.number.text = item.expectedDate
-        holder.binding.collar.text = item.size?.collar.toString()
-        holder.binding.length.text = item.size?.length.toString()
-        holder.binding.waist.text = item.size?.waist.toString()
-        holder.binding.shoulder.text = item.size?.shoulder.toString()
-        holder.binding.sleeve.text = item.size?.sleeve.toString()
-        holder.binding.chest.text = item.size?.chest.toString()
-        holder.binding.shirt.text = item.size?.type
+//        holder.binding.number.text = item.expectedDate
+//        holder.binding.collar.text = item.size?.collar.toString()
+//        holder.binding.length.text = item.size?.length.toString()
+//        holder.binding.waist.text = item.size?.waist.toString()
+//        holder.binding.shoulder.text = item.size?.shoulder.toString()
+//        holder.binding.sleeve.text = item.size?.sleeve.toString()
+//        holder.binding.chest.text = item.size?.chest.toString()
+//        holder.binding.shirt.text = item.size?.type
+//
+//        holder.binding.cuff.text = item.size?.cuff.toString()
+//        holder.binding.length1.text = item.size?.length1.toString()
+//        holder.binding.bottom.text = item.size?.bottom.toString()
+//        holder.binding.kunda.text = item.size?.kunda.toString()
+//        holder.binding.asan.text = item.size?.asan.toString()
 
-        holder.binding.cuff.text = item.size?.cuff.toString()
-        holder.binding.length1.text = item.size?.length1.toString()
-        holder.binding.bottom.text = item.size?.bottom.toString()
-        holder.binding.kunda.text = item.size?.kunda.toString()
-        holder.binding.asan.text = item.size?.asan.toString()
+          holder.binding.textView16.text = item.date?.toString()
+          holder.binding.textView30.text = item.customInstr?.toString()
+        holder.binding.textView32.text = item.tailorComment?.toString()
+        holder.binding.textView28.text = item.expectedDate?.toString()
+        holder.binding.textView7.text = item.price?.toString()
 
 
 

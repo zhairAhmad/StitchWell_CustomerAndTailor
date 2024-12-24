@@ -24,6 +24,25 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/namee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:hint="Customer Customization?"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/expectedDate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text|textCapCharacters" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/expectedDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -80,7 +99,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/phone"
-                    app:layout_constraintTop_toBottomOf="@+id/expectedDate" />
+                    app:layout_constraintTop_toBottomOf="@+id/price" />
 
                 <TextView
                     android:id="@+id/measureHeading2"
@@ -98,6 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="Add Customer Details"
                     android:textSize="20dp"
                     android:textStyle="bold"
@@ -106,20 +126,20 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/namee"
+                    android:id="@+id/price"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp"
+                    android:hint="Price Of Order"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Heading">
+                    app:layout_constraintTop_toBottomOf="@+id/namee">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Enter Name"
                         android:inputType="text|textCapCharacters" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -128,10 +148,12 @@
                     android:id="@+id/phone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="@+id/namee"
-                    app:layout_constraintStart_toStartOf="@+id/namee"
-                    app:layout_constraintTop_toBottomOf="@+id/namee">
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/Heading">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -325,11 +347,17 @@
                 <Button
                     android:id="@+id/saveBtn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="SAVE"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:backgroundTint="#404393"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Save The Order"
+                    android:textSize="16sp"
+                    app:cornerRadius="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintHorizontal_bias="0.497"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/asan" />
 
@@ -337,9 +365,11 @@
                     android:id="@+id/cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="23dp"
+                    android:fontFamily="@font/poppins_light"
                     android:text="Cancel"
                     app:layout_constraintBottom_toBottomOf="@+id/Heading"
-                    app:layout_constraintEnd_toEndOf="@+id/namee" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
