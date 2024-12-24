@@ -39,6 +39,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    packaging{
+        resources{
+            excludes+= "META-INF/DEPENDENCIES"
+    }
 }
 
 dependencies {
@@ -54,9 +58,11 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-messaging")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
 
@@ -69,8 +75,11 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.cloudinary:cloudinary-android:2.1.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
+    implementation("com.mcxiaoke.volley:library:1.0.19")
 }
 
 kapt {
     correctErrorTypes = true
-}
+}}
