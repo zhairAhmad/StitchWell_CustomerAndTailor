@@ -6,11 +6,11 @@
         android:title="Tailor Info"
         android:icon="@drawable/baseline_short_text_24"/>
 
-    <item
+<!--    <item-->
 
-        android:id="@+id/item_measurement"
-        android:title="Measurements"
-        android:icon="@drawable/baseline_menu_book_24"/>
+<!--        android:id="@+id/item_measurement"-->
+<!--        android:title="Measurements"-->
+<!--        android:icon="@drawable/baseline_menu_book_24"/>-->
     <item
         android:id="@+id/item_about"
         android:title="About Us"

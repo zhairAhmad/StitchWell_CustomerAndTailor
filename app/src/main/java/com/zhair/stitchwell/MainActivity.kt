@@ -11,19 +11,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.cloudinary.android.uploadwidget.UploadWidget.startActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
+import android.Manifest
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                    if(user !==null){
                         userrole.text = user!!.role
                         userName.text = user!!.fullName
+                        askNotificationPermission()
 //                    }
                 }
             }
@@ -80,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         bottomNavigationView.setupWithNavController(navHostFragment.navController)
 
-
+//        askNotificationPermission()
     }
 
 
@@ -95,8 +99,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.item_about -> {
-                // Navigate to home screen (replace with your actual navigation logic)
-                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity, AboutUsActivity::class.java))
+            }
+            R.id.item_tailor -> {
+                startActivity(Intent(this@MainActivity, TailorInfoActivity::class.java))
             }
             // Add cases for other navigation items if needed
         }
@@ -125,8 +131,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Log.d("FCM", "Fetching FCM registration token failed ${task.result!!}")
 
                 lifecycleScope.launch {
-                    val result=NotificationsRepository().saveToken(AuthRepositories().getCurrentUser()?.idd!!,task.result!!)
-                    Log.d("FCM", "askNotificationPermission: ${result.exceptionOrNull()}")
+                    if(user !== null){
+                        Log.i("FMC Token", task.result)
+                        if(user!!.fmcToken != task.result){
+                            user!!.fmcToken = task.result
+                            authViewModel.updateUserProfile(user!!)
+                            Log.i("FMC", "Token Updated Mainacitivy");
+                        }
+                    }
+                     else{
+                         Log.i("FCM", "user object is null")
+                    }
+
+//                    val result=NotificationsRepository().saveToken(user?.idd!!,task.result!!)
+//                    Log.d("FCM", "askNotificationPermission: ${result.exceptionOrNull()}")
                 }
 
             })

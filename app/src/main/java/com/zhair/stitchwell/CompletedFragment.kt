@@ -45,7 +45,7 @@ class CompletedFragment : Fragment() {
                 it?.let {
                     CurrentUser = it
                     user =it
-                    if(!CurrentUser.role.equals("admin")){
+                    if(CurrentUser.role.equals("Admin")){
                         viewModel.readAllCompleted()
                     } else{
                         viewModel.readOrders()

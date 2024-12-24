@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.MultiFactor
 import com.google.firebase.auth.oAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -16,9 +17,22 @@ class AuthViewModel:ViewModel() {
     var isSavingUser = MutableStateFlow<Boolean>(false)
     var isUpdated = MutableStateFlow<Boolean>(false)
     var isPasswordUpdated = MutableStateFlow<Boolean>(false)
-
+    val token = MutableStateFlow<String?>(null)
     val failureMessage = MutableStateFlow<String?>(null)
     val resetResponse = MutableStateFlow<Boolean?>(null)
+
+    fun  getTokenOf(phone: String){
+        viewModelScope.launch {
+            val result=AuthRepository.getTokenOf(phone)
+            if (result.isSuccess){
+                  if(result.getOrNull()!=null){
+                      token.value=result.getOrNull()!!.fmcToken
+                  }
+            }else{
+                failureMessage.value=result.exceptionOrNull()?.message
+            }
+        }
+    }
 
     fun resetPassword(email:String){
         viewModelScope.launch {

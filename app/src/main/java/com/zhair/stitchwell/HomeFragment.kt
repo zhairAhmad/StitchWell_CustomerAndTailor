@@ -38,7 +38,6 @@ class HomeFragment : Fragment() {
         authViewModel=AuthViewModel()
         CurrentUser=Users("","","","", "")
         authViewModel.loadUser()
-        Log.i("test1", "Test")
 
         lifecycleScope.launch {
             authViewModel.currentUser.collect {
@@ -46,11 +45,12 @@ class HomeFragment : Fragment() {
                     CurrentUser = it
                     user=it
 
-                    if(!CurrentUser.role.equals("admin")){
-                        binding.floatingActionButton.visibility=View.GONE
+                    if(CurrentUser.role.equals("Admin")){
+
                         viewModel.readAllOrders()
 
                     } else{
+                        binding.floatingActionButton.visibility=View.GONE
                         viewModel.readOrders()
                     }
                 }

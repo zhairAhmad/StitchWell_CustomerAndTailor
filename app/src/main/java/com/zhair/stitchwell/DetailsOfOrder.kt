@@ -2,6 +2,7 @@ package com.zhair.stitchwell
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -20,9 +21,12 @@ class DetailsOfOrder : AppCompatActivity() {
     lateinit var order:Order
     lateinit var viewModel:OrderDetailViewModel
     lateinit var progressDialog: ProgressDialog
+    lateinit var tokenOfUser:String
+    lateinit var  authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        tokenOfUser=""
         viewModel= OrderDetailViewModel()
         binding= ActivityDetailsOfOrderBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,6 +55,9 @@ class DetailsOfOrder : AppCompatActivity() {
         progressDialog= ProgressDialog(this)
         progressDialog.setMessage("Updating the Order Status...Please Update")
         progressDialog.setCancelable(false)
+        authViewModel= AuthViewModel()
+        authViewModel.getTokenOf(order.phoneNumber!!)
+
         binding.workStarted2.setOnClickListener(){
             progressDialog.show()
             order.status="Work Started"
@@ -90,24 +97,24 @@ class DetailsOfOrder : AppCompatActivity() {
                         "Status Updated Successfully.",
                         Toast.LENGTH_SHORT
                     ).show()
+                    if(tokenOfUser != ""){
+                        if(order.status.equals("Work Started")){
+                            NotificationsRepository().sendNotification(tokenOfUser, "Order Status Updated", "Tailor Started the work on your Order", this@DetailsOfOrder)
+                        }
+
+                    } else{
+                        Log.i("FMC", "Notification not send because token is null")
+                    }
+
                     finish()
 
                 }
             }
         }
         lifecycleScope.launch {
-            viewModel.isSaved.collect {
-//                        progressDialog.show()
-                if (it==true) {
-                    progressDialog.dismiss()
-
-                    Toast.makeText(
-                        this@DetailsOfOrder,
-                        "Status Updated Successfully.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
-
+            authViewModel.token.collect{
+                it?.let {
+                    tokenOfUser=it
                 }
             }
         }

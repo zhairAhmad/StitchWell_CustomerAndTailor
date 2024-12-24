@@ -45,7 +45,7 @@ class PendingFragment : Fragment() {
                     CurrentUser = it
                     user =it
                     viewModel.readOrders()
-                    if(!CurrentUser.role.equals("admin")){
+                    if(CurrentUser.role.equals("Admin")){
                         viewModel.readAllPending()
 
                     } else{

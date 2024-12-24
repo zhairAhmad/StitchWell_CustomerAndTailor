@@ -8,6 +8,8 @@ import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.auth.User
+import com.google.firebase.firestore.snapshots
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositories {
@@ -58,7 +60,7 @@ class AuthRepositories {
             // Create Users object
             val user = Users(
                 idd = userId,
-                role = "customer",
+                role = "Customer",
                 fullName = name,
                 email = email,
                 phone = phone
@@ -77,6 +79,23 @@ class AuthRepositories {
 
 
     }
+
+  suspend  fun getTokenOf(phoneNumber: String): Result<Users> {
+      try {
+          val result = UserCollection.whereEqualTo("phoneNumber",phoneNumber).get().await()
+          val users = result.documents.first().toObject(Users::class.java)
+          if(users != null){
+              return  Result.success(users)
+          } else {
+              return Result.failure(Exception("User not found while finding token"))
+          }
+
+
+      } catch (e: Exception) {
+          return Result.failure(e)
+      }
+  }
+
 
     suspend fun saveUser(user: Users): Result<Boolean> {
         try {
@@ -124,6 +143,7 @@ class AuthRepositories {
         }
     }
 
+
     suspend fun updateUserProfile(user: Users): Result<Boolean> {
         try {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -133,20 +153,14 @@ class AuthRepositories {
             val usersCollection = db.collection("users")
 
             usersCollection.document(uid!!).set(user, SetOptions.merge()).await()
-//             firebaseUser.updateEmail(user.email)?.await() // Update email
 
-//            FirebaseAuth.getInstance().currentUser!!.updateEmail(user.email!!)
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        Log.i("email updated", "User email address updated.")
-//                    }
-//                }
             return Result.success(true)
         } catch (e: Exception) {
             Log.e("UpdateUserProfile", "Error updating user profile: ${e.message}")
             return Result.failure(e)
         }
     }
+
 
     fun getCurrentUser(): Users? {
         val firebaseUser = FirebaseAuth.getInstance().currentUser

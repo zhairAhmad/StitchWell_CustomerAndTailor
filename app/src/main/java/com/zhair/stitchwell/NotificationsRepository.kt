@@ -8,6 +8,7 @@ class NotificationsRepository {
     val notificationCollection = FirebaseFirestore.getInstance().collection("notification")
 
     suspend fun saveToken(userId: String, token: String): Result<Boolean> {
+
         try {
             notificationCollection.document(userId).set(mapOf("token" to token)).await()
             return Result.success(true)
