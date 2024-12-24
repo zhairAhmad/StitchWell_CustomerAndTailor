@@ -3,15 +3,17 @@ package com.zhair.stitchwell
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositories {
     val UserCollection = FirebaseFirestore.getInstance().collection("users")
 
-    suspend fun logout():Result<Boolean>{
+    suspend fun logout(): Result<Boolean> {
         FirebaseAuth.getInstance().signOut()
         return Result.success(true)
     }
@@ -19,12 +21,13 @@ class AuthRepositories {
 
     suspend fun login(email: String, password: String): Result<Users> {
         try {
-            val result = FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
+            val result =
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
             val firebaseUser = result.user!!
 
             // Create Users object from FirebaseUser
             val user = Users(
-                id = firebaseUser.uid,
+                idd = firebaseUser.uid,
                 role = "customer", // You might need to fetch the role from Firestore
                 fullName = firebaseUser.displayName ?: "", // Handle null if needed
                 email = firebaseUser.email ?: "", // Handle null if needed
@@ -38,10 +41,15 @@ class AuthRepositories {
     }
 
 
-
-    suspend fun signup(name: String, email: String, phone: String, password: String): Result<Users> {
+    suspend fun signup(
+        name: String,
+        email: String,
+        phone: String,
+        password: String
+    ): Result<Users> {
         try {
-            val result = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).await()
+            val result =
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).await()
             val firebaseUser = result.user!!
 
             // Assign user ID
@@ -49,7 +57,7 @@ class AuthRepositories {
 
             // Create Users object
             val user = Users(
-                id = userId,
+                idd = userId,
                 role = "customer",
                 fullName = name,
                 email = email,
@@ -72,7 +80,7 @@ class AuthRepositories {
 
     suspend fun saveUser(user: Users): Result<Boolean> {
         try {
-            val document = UserCollection.document()
+            val document = UserCollection.document(user.idd!!)
 //            user.id = document.id
             document.set(user).await()
             return Result.success(true)
@@ -90,27 +98,22 @@ class AuthRepositories {
             return Result.failure(e)
         }
     }
+
     suspend fun loadUser(): Result<Users?> {
         return try {
-            // Get current user's UID from FirebaseAuth
             val uid = FirebaseAuth.getInstance().currentUser?.uid
                 ?: return Result.success(null)
-            // If the user is not logged in, return null
-            Log.i("test3", uid)
-            // Firestore instance and users collection
+
             val db = FirebaseFirestore.getInstance()
             val usersCollection = db.collection("users")
 
-            // Query Firestore for the user document where id matches the UID
-            val querySnapshot = usersCollection.whereEqualTo("id", uid).get().await()
+            val querySnapshot = usersCollection.whereEqualTo("idd", uid).get().await()
             if (!querySnapshot.isEmpty) {
                 // Assuming you expect a single document; retrieve the first one
                 val documentSnapshot = querySnapshot.documents.first()
                 val user = documentSnapshot.toObject(Users::class.java)
-                Log.i("test3", user!!.phone.toString())
                 Result.success(user)
             } else {
-                Log.i("test3", "No matching user found")
                 Result.success(null) // No matching user found
 
             }
@@ -120,11 +123,36 @@ class AuthRepositories {
             Result.failure(e)
         }
     }
+
+    suspend fun updateUserProfile(user: Users): Result<Boolean> {
+        try {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+
+            val db = FirebaseFirestore.getInstance()
+            val usersCollection = db.collection("users")
+
+            usersCollection.document(uid!!).set(user, SetOptions.merge()).await()
+//             firebaseUser.updateEmail(user.email)?.await() // Update email
+
+//            FirebaseAuth.getInstance().currentUser!!.updateEmail(user.email!!)
+//                .addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        Log.i("email updated", "User email address updated.")
+//                    }
+//                }
+            return Result.success(true)
+        } catch (e: Exception) {
+            Log.e("UpdateUserProfile", "Error updating user profile: ${e.message}")
+            return Result.failure(e)
+        }
+    }
+
     fun getCurrentUser(): Users? {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         return if (firebaseUser != null) {
             Users(
-                id = firebaseUser.uid,
+                idd = firebaseUser.uid,
                 role = "customer", // You might need to fetch the role from Firestore
                 fullName = firebaseUser.displayName ?: "", // Handle null if needed
                 email = firebaseUser.email ?: "", // Handle null if needed
@@ -134,7 +162,18 @@ class AuthRepositories {
             null
         }
     }
+
+    suspend fun updatePassword(newPassword: String): Result<Boolean> {
+        return try {
+            val user = FirebaseAuth.getInstance().currentUser
+            user!!.updatePassword(newPassword).await() // Use await() for asynchronous operation
+          return Result.success(true) // Update successful
+        } catch (e: Exception) {
+            return Result.failure(e) // Update failed
+        }
+    }
+}
 //fun getCurrentUser():FirebaseUser?{
 //    return FirebaseAuth.getInstance().currentUser
 //}
-}
+

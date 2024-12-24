@@ -36,9 +36,9 @@ class OrderRepository {
 
     fun getOrders() =
         orderCollection.snapshots().map { it.toObjects(Order::class.java) }
+
     fun getOrdersOfUser(phoneNumber: String) =
         orderCollection.whereEqualTo("phoneNumber",phoneNumber).snapshots().map { it.toObjects(Order::class.java)
-
         }
 
 
@@ -46,6 +46,9 @@ class OrderRepository {
         orderCollection.whereEqualTo("phoneNumber",phoneNumber).whereEqualTo("status", "Pending").snapshots().map { it.toObjects(Order::class.java) }
     fun getOrdersOfUserCompleted(phoneNumber: String) =
         orderCollection.whereEqualTo("phoneNumber",phoneNumber).whereEqualTo("status", "Completed").snapshots().map { it.toObjects(Order::class.java) }
-
+    fun getAllCompleted() =
+        orderCollection.whereEqualTo("status", "Completed").snapshots().map { it.toObjects(Order::class.java) }
+    fun getAllPending() =
+        orderCollection.whereEqualTo("status", "Pending").snapshots().map { it.toObjects(Order::class.java) }
 }
 

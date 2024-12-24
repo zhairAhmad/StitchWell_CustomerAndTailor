@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
     val currentUser = MutableStateFlow<Users?>(null)
 
     init {
-        currentUser.value=authRepository.getCurrentUser()
+     currentUser.value=authRepository.getCurrentUser()
     }
 
     fun logout(){

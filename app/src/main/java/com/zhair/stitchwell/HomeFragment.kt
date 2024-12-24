@@ -43,19 +43,21 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             authViewModel.currentUser.collect {
                 it?.let {
-                    Log.i("test2", it.phone.toString())
                     CurrentUser = it
                     user=it
-                    viewModel.readOrders()
+
                     if(!CurrentUser.role.equals("admin")){
                         binding.floatingActionButton.visibility=View.GONE
+                        viewModel.readAllOrders()
+
+                    } else{
+                        viewModel.readOrders()
                     }
                 }
             }
         }
 
         binding.floatingActionButton.setOnClickListener(){
-//          startActivity(Intent(this@HomeFragment, Add_Order::class.java))
             startActivity(Intent(requireActivity(), Add_Order::class.java))
         }
         adapter= OrderAdapter(items)
@@ -68,7 +70,7 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.failureMessage.collect {
                 it?.let {
-                    Log.i("test1", it)
+
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                 }
             }
@@ -76,11 +78,6 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.data.collect {
                 it?.let {
-                    Log.d("test1", it.firstOrNull()!!.phoneNumber.toString())
-//                    val filteredItems = it.filter { order ->
-//                        order.phoneNumber == CurrentUser.phone
-//                    }
-//                    Log.i("test1", CurrentUser.phone.toString())
                     items.clear()
                     items.addAll(it)
                     adapter.notifyDataSetChanged()

@@ -32,4 +32,14 @@ class PendingFragmentViewModel : ViewModel() {
                 }
         }
     }
+    fun readAllPending() {
+        viewModelScope.launch {
+            orderRepository.getAllPending().catch {
+                failureMessage.value = it.message
+            }
+                .collect {
+                    data.value = it
+                }
+        }
+    }
 }

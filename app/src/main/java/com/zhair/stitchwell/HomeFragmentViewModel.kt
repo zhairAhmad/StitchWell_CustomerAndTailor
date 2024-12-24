@@ -32,6 +32,17 @@ class HomeFragmentViewModel : ViewModel() {
                 }
         }
     }
+
+    fun readAllOrders() {
+        viewModelScope.launch {
+            orderRepository.getOrders().catch {
+                failureMessage.value = it.message
+            }
+                .collect {
+                    data.value = it
+                }
+        }
+    }
 //fun readHandcrafts() {
 //    viewModelScope.launch {
 //        orderRepository.getOrders().catch {

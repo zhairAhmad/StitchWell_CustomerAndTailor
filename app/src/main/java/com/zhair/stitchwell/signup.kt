@@ -21,7 +21,7 @@ class signup : AppCompatActivity() {
         binding=ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel=AuthViewModel()
-        viewModel.checkUser()
+//        viewModel.checkUser()
 //           viewModel.getCurrentUser()
         progressDialog=ProgressDialog(this)
         progressDialog.setMessage("Please wait while we create your account...")

@@ -13,7 +13,9 @@ import kotlinx.coroutines.tasks.await
 class AuthViewModel:ViewModel() {
     val AuthRepository = AuthRepositories()
     val currentUser = MutableStateFlow<Users?>(null)
-//    val currentUser = MutableStateFlow<FirebaseUser?>(null)
+    var isSavingUser = MutableStateFlow<Boolean>(false)
+    var isUpdated = MutableStateFlow<Boolean>(false)
+    var isPasswordUpdated = MutableStateFlow<Boolean>(false)
 
     val failureMessage = MutableStateFlow<String?>(null)
     val resetResponse = MutableStateFlow<Boolean?>(null)
@@ -37,6 +39,21 @@ class AuthViewModel:ViewModel() {
     }
 
 
+    }
+    fun updateUserProfile(user:Users){
+        viewModelScope.launch {
+            isSavingUser.value= true
+            val isUpdateSuccessful = AuthRepository.updateUserProfile(user)
+            if (isUpdateSuccessful.isSuccess) {
+                isSavingUser.value=false
+                currentUser.value=user
+                isUpdated.value=isUpdateSuccessful.getOrThrow()
+            } else {
+                isSavingUser.value=false
+                isUpdated.value=false
+                failureMessage.value = isUpdateSuccessful.exceptionOrNull()?.message
+            }
+        }
     }
 
     fun signUp(name: String, email: String, phone: String, password: String) {
@@ -66,6 +83,16 @@ class AuthViewModel:ViewModel() {
         }
     }
 
+    fun updatePassword(newPassword:String){
+        viewModelScope.launch {
+            val isUpdateSuccessful = AuthRepository.updatePassword(newPassword)
+            if (isUpdateSuccessful.isSuccess) {
+               isPasswordUpdated.value=isUpdateSuccessful.getOrThrow()
+            } else {
+                failureMessage.value=isUpdateSuccessful.exceptionOrNull()?.message
+            }
+        }
+    }
     fun login(email:String,password:String){
         viewModelScope.launch {
             val result=AuthRepository.login(email,password)

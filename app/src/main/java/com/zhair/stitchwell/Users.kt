@@ -1,6 +1,6 @@
 package com.zhair.stitchwell
 class Users(
-    var id:String?=null,
+    var idd:String?=null,
     var role:String?=null,
     var fullName:String?=null,
     var email:String?=null,

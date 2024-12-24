@@ -28,14 +28,15 @@ class CompletedFragmentViewModel : ViewModel() {
                 }
         }
     }
-//fun readHandcrafts() {
-//    viewModelScope.launch {
-//        orderRepository.getOrders().catch {
-//            failureMessage.value = it.message
-//        }
-//            .collect {
-//                data.value = it
-//            }
-//    }
-//}
+
+    fun readAllCompleted() {
+        viewModelScope.launch {
+            orderRepository.getAllCompleted().catch {
+                failureMessage.value = it.message
+            }
+                .collect {
+                    data.value = it
+                }
+        }
+    }
 }

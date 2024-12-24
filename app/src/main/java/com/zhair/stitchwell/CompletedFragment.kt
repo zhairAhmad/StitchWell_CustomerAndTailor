@@ -39,15 +39,17 @@ class CompletedFragment : Fragment() {
         authViewModel=AuthViewModel()
         CurrentUser=Users("","","","", "")
         authViewModel.loadUser()
-        Log.i("test1", "Test")
 
         lifecycleScope.launch {
             authViewModel.currentUser.collect {
                 it?.let {
-                    Log.i("test2", it.phone.toString())
                     CurrentUser = it
                     user =it
-                    viewModel.readOrders()
+                    if(!CurrentUser.role.equals("admin")){
+                        viewModel.readAllCompleted()
+                    } else{
+                        viewModel.readOrders()
+                    }
                 }
             }
         }
@@ -70,11 +72,6 @@ class CompletedFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.data.collect {
                 it?.let {
-//                    Log.d("test1", it.firstOrNull()!!.phoneNumber.toString())
-//                    val filteredItems = it.filter { order ->
-//                        order.phoneNumber == CurrentUser.phone
-//                    }
-//                    Log.i("test1", CurrentUser.phone.toString())
                     items.clear()
                     items.addAll(it)
                     adapter.notifyDataSetChanged()

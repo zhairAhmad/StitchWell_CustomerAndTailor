@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -27,21 +28,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         var user: Users? = null
     }
-
+    lateinit var  authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-//        val floatingBtn = findViewById<FloatingActionButton>(R.id.floatingActionButton)
 
 
 
-
-//
-//        floatingBtn.setOnClickListener {
-//            val intent = Intent(this, Add_Order::class.java)
-//            startActivity(intent)
-//        }
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -49,6 +42,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
+
+        val headerView = navigationView.getHeaderView(0)
+
+        val userrole = headerView.findViewById<TextView>(R.id.rolee)
+        val userName = headerView.findViewById<TextView>(R.id.textView10)
 
         navigationView.setNavigationItemSelectedListener(this)
 
@@ -58,6 +56,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 drawer.closeDrawer(GravityCompat.START)
             } else {
                 drawer.openDrawer(GravityCompat.START)
+            }
+        }
+
+      authViewModel = AuthViewModel()
+        authViewModel.loadUser()
+
+        lifecycleScope.launch {
+            authViewModel.currentUser.collect{
+                it?.let {
+                    user = it
+//                    if(user !==null){
+                        userrole.text = user!!.role
+                        userName.text = user!!.fullName
+//                    }
+                }
             }
         }
 
@@ -83,15 +96,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     finish()
                 }
             }
-
             R.id.item_about -> {
                 // Navigate to home screen (replace with your actual navigation logic)
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
             }
             // Add cases for other navigation items if needed
         }
-        // Close the drawer
         return true
     }
+
 
 }

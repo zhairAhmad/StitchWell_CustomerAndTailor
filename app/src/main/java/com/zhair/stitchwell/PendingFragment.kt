@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.coderobust.handcraftsshop.ui.main.home.PendingFragmentViewModel
 import com.zhair.stitchwell.MainActivity.Companion.user
 import com.zhair.stitchwell.databinding.FragmentHomeBinding
+import com.zhair.stitchwell.databinding.FragmentPendingBinding
 import kotlinx.coroutines.launch
 
 class PendingFragment : Fragment() {
     lateinit var adapter: OrderAdapter
-    lateinit var binding: FragmentHomeBinding
+    lateinit var binding: FragmentPendingBinding
     lateinit var viewModel: PendingFragmentViewModel
     lateinit var authViewModel: AuthViewModel
     lateinit var CurrentUser:Users
@@ -28,7 +29,7 @@ class PendingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= FragmentHomeBinding.inflate(inflater,container,false)
+        binding= FragmentPendingBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -37,17 +38,18 @@ class PendingFragment : Fragment() {
         authViewModel=AuthViewModel()
         CurrentUser=Users("","","","", "")
         authViewModel.loadUser()
-        Log.i("test1", "Test")
 
         lifecycleScope.launch {
             authViewModel.currentUser.collect {
                 it?.let {
-                    Log.i("test2", it.phone.toString())
                     CurrentUser = it
                     user =it
                     viewModel.readOrders()
                     if(!CurrentUser.role.equals("admin")){
-                        binding.floatingActionButton.visibility=View.GONE
+                        viewModel.readAllPending()
+
+                    } else{
+                        viewModel.readOrders()
                     }
                 }
             }
@@ -64,7 +66,6 @@ class PendingFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.failureMessage.collect {
                 it?.let {
-                    Log.i("test1", it)
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
                 }
             }
@@ -72,11 +73,6 @@ class PendingFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.data.collect {
                 it?.let {
-//                    Log.d("test1", it.firstOrNull()!!.phoneNumber.toString())
-//                    val filteredItems = it.filter { order ->
-//                        order.phoneNumber == CurrentUser.phone
-//                    }
-//                    Log.i("test1", CurrentUser.phone.toString())
                     items.clear()
                     items.addAll(it)
                     adapter.notifyDataSetChanged()
