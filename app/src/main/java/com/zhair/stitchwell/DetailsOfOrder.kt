@@ -15,6 +15,7 @@ import com.zhair.stitchwell.MainActivity.Companion.user
 import com.zhair.stitchwell.databinding.ActivityDetailsOfOrderBinding
 import com.zhair.stitchwell.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
+import  com.zhair.stitchwell.FCMHelper
 
 class DetailsOfOrder : AppCompatActivity() {
     lateinit var binding: ActivityDetailsOfOrderBinding
@@ -43,7 +44,7 @@ class DetailsOfOrder : AppCompatActivity() {
         binding.textView32.text=order.tailorComment
         binding.textView28.text=order.expectedDate
         binding.textView7.text=order.price.toString()
-
+        val previousComment= order.tailorComment
         binding.collar.text=order.size?.collar.toString()
         binding.length.text=order.size?.length.toString()
         binding.waist.text=order.size?.waist.toString()
@@ -63,6 +64,7 @@ class DetailsOfOrder : AppCompatActivity() {
         progressDialog.setMessage("Updating the Order Status...Please Update")
         progressDialog.setCancelable(false)
         authViewModel= AuthViewModel()
+
         authViewModel.getTokenOf(order.phoneNumber!!)
 
         binding.workStarted.setOnClickListener(){
@@ -91,9 +93,11 @@ class DetailsOfOrder : AppCompatActivity() {
         }
         binding.UpdateComment.setOnClickListener(){
             progressDialog.show()
-            if(binding.name.editText!!.text.toString() != ""){
+            if(binding.name.editText!!.text.toString() != "" && binding.name.editText!!.text.toString() != previousComment){
                 order.tailorComment=binding.name.editText!!.text.toString()
                 viewModel.updateOrder(order)
+            }else{
+                Toast.makeText(this,"No Changes Made",Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -120,9 +124,15 @@ class DetailsOfOrder : AppCompatActivity() {
                     ).show()
                     if(tokenOfUser != ""){
                         if(order.status.equals("Work Started")){
-                            NotificationsRepository().sendNotification(tokenOfUser, "Order Status Updated", "Tailor Started the work on your Order", this@DetailsOfOrder)
+                          FCMHelper().sendNotificationToUser(tokenOfUser, "Order Status Updated", "Tailor Started the work on your Order", this@DetailsOfOrder)
                         }
-
+                        else if(order.status.equals("Completed")){
+                            FCMHelper().sendNotificationToUser(tokenOfUser, "Order Status Updated", "Tailor Completed your Order", this@DetailsOfOrder)
+                        } else if(order.status.equals("Order Cancelled")){
+                            FCMHelper().sendNotificationToUser(tokenOfUser, "Your Order Cancelled", "Tailor Cancelled your Order due to some Reason", this@DetailsOfOrder)
+                        } else if(order.tailorComment != previousComment){
+                            FCMHelper().sendNotificationToUser(tokenOfUser, "Tailor Left Comment on Your Order", "${order.tailorComment}", this@DetailsOfOrder)
+                        }
                     } else{
                         Log.i("FMC", "Notification not send because token is null")
                     }

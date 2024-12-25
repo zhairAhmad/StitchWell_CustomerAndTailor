@@ -82,16 +82,21 @@ class AuthRepositories {
 
   suspend  fun getTokenOf(phoneNumber: String): Result<Users> {
       try {
-          val result = UserCollection.whereEqualTo("phoneNumber",phoneNumber).get().await()
+          val result = FirebaseFirestore.getInstance().collection("users").whereEqualTo("phone",phoneNumber).get().await()
           val users = result.documents.first().toObject(Users::class.java)
           if(users != null){
               return  Result.success(users)
+
+//              Log.i("Token", "Get Success ${users.fmcToken}")
           } else {
+
+//              Log.i("Token", "Get Success failed")
               return Result.failure(Exception("User not found while finding token"))
           }
 
 
       } catch (e: Exception) {
+//          Log.i("Token", "Get failed ${e}")
           return Result.failure(e)
       }
   }

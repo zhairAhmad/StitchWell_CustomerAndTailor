@@ -20,15 +20,15 @@ class NotificationsRepository {
     fun getToken(userId: String) =
         notificationCollection.document(userId).get()
 
-    fun sendNotification(uid: String, title: String, message: String, context: Context) {
-        getToken(uid).addOnSuccessListener {
-            if (it != null)
-                FCMHelper().sendNotificationToUser(
-                    it.getString("token")!!,
-                    title,
-                    message,
-                    context
-                )
-        }
-    }
+//    fun sendNotification(uid: String, title: String, message: String, context: Context) {
+////        getToken(uid).addOnSuccessListener {
+////            if (it != null)
+//                FCMHelper().sendNotificationToUser(
+//                    uid!!,
+//                    title,
+//                    message,
+//                    context
+////                )
+//        }
+////    }
 }

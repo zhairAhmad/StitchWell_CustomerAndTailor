@@ -23,12 +23,17 @@ class AuthViewModel:ViewModel() {
 
     fun  getTokenOf(phone: String){
         viewModelScope.launch {
+//            Log.i("Token", "Phone: $phone")
             val result=AuthRepository.getTokenOf(phone)
+
             if (result.isSuccess){
+
+//                Log.i("Token", "Get Success ${result.getOrNull()!!.fmcToken} viewmodel")
                   if(result.getOrNull()!=null){
                       token.value=result.getOrNull()!!.fmcToken
                   }
             }else{
+//                Log.i("Token", "Get Success failed viwmodel")
                 failureMessage.value=result.exceptionOrNull()?.message
             }
         }
