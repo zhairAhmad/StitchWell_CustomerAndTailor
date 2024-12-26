@@ -1,6 +1,7 @@
 package com.zhair.stitchwell
 
 import OrderAdapter
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ class HomeFragment : Fragment() {
     lateinit var binding:FragmentHomeBinding
     lateinit var viewModel: HomeFragmentViewModel
     lateinit var authViewModel: AuthViewModel
+    lateinit var progesssDialog: ProgressDialog
     lateinit var CurrentUser:Users
     val items=ArrayList<Order>()
 
@@ -35,6 +37,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progesssDialog = ProgressDialog(requireContext())
+        progesssDialog.setMessage("Loading...")
+        progesssDialog.setCancelable(false)
+        progesssDialog.show()
         authViewModel=AuthViewModel()
         CurrentUser=Users("","","","", "")
         authViewModel.loadUser()
@@ -65,8 +71,6 @@ class HomeFragment : Fragment() {
         binding.recyclerview.layoutManager= LinearLayoutManager(context)
 
         viewModel= HomeFragmentViewModel()
-//        viewModel.readOrders()
-//        viewModel.readHandcrafts()
         lifecycleScope.launch {
             viewModel.failureMessage.collect {
                 it?.let {
@@ -81,7 +85,10 @@ class HomeFragment : Fragment() {
                     items.clear()
                     items.addAll(it)
                     adapter.notifyDataSetChanged()
+                    binding.cardView2.visibility=View.GONE
+                    progesssDialog.dismiss()
                 }
+
             }
         }
     }

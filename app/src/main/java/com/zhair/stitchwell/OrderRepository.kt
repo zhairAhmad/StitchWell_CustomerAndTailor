@@ -1,6 +1,7 @@
 package com.zhair.stitchwell
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.snapshots
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
@@ -46,6 +47,28 @@ class OrderRepository {
         orderCollection.whereEqualTo("phoneNumber",phoneNumber).whereEqualTo("status", "Pending").snapshots().map { it.toObjects(Order::class.java) }
     fun getOrdersOfUserCompleted(phoneNumber: String) =
         orderCollection.whereEqualTo("phoneNumber",phoneNumber).whereEqualTo("status", "Completed").snapshots().map { it.toObjects(Order::class.java) }
+    suspend fun getMostRecentOrderOfUser(phoneNumber: String): Result<Order?>{
+        try {
+            val result = orderCollection
+                .whereEqualTo("phoneNumber", phoneNumber)
+                .orderBy("date", Query.Direction.DESCENDING)
+                .get()
+                .await()
+                .toObjects(Order::class.java)
+                .firstOrNull()
+
+            if(result == null){
+                return  Result.success(null)
+            } else{
+                return Result.success(result)
+            }
+
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+
     fun getAllCompleted() =
         orderCollection.whereEqualTo("status", "Completed").snapshots().map { it.toObjects(Order::class.java) }
     fun getAllPending() =

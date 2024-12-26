@@ -1,6 +1,7 @@
 package com.zhair.stitchwell
 
 import OrderAdapter
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ class CompletedFragment : Fragment() {
     lateinit var binding: FragmentCompletedBinding
     lateinit var viewModel: CompletedFragmentViewModel
     lateinit var authViewModel: AuthViewModel
+    lateinit var progesssDialog: ProgressDialog
     lateinit var CurrentUser:Users
     val items=ArrayList<Order>()
 
@@ -39,6 +41,10 @@ class CompletedFragment : Fragment() {
         authViewModel=AuthViewModel()
         CurrentUser=Users("","","","", "")
         authViewModel.loadUser()
+        progesssDialog = ProgressDialog(requireContext())
+        progesssDialog.setMessage("Loading...")
+        progesssDialog.setCancelable(false)
+        progesssDialog.show()
 
         lifecycleScope.launch {
             authViewModel.currentUser.collect {
@@ -75,6 +81,11 @@ class CompletedFragment : Fragment() {
                     items.clear()
                     items.addAll(it)
                     adapter.notifyDataSetChanged()
+                    binding.cardView2.visibility=View.GONE
+                    progesssDialog.dismiss()
+                }
+                if(items.isEmpty()){
+                    binding.cardView2.visibility=View.VISIBLE
                 }
             }
         }

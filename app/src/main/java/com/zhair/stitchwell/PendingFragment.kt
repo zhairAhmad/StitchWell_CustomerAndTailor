@@ -1,6 +1,7 @@
 package com.zhair.stitchwell
 
 import OrderAdapter
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class PendingFragment : Fragment() {
     lateinit var adapter: OrderAdapter
+    lateinit var progesssDialog: ProgressDialog
     lateinit var binding: FragmentPendingBinding
     lateinit var viewModel: PendingFragmentViewModel
     lateinit var authViewModel: AuthViewModel
@@ -38,7 +40,10 @@ class PendingFragment : Fragment() {
         authViewModel=AuthViewModel()
         CurrentUser=Users("","","","", "")
         authViewModel.loadUser()
-
+         progesssDialog = ProgressDialog(requireContext())
+        progesssDialog.setMessage("Loading...")
+        progesssDialog.setCancelable(false)
+        progesssDialog.show()
         lifecycleScope.launch {
             authViewModel.currentUser.collect {
                 it?.let {
@@ -76,6 +81,8 @@ class PendingFragment : Fragment() {
                     items.clear()
                     items.addAll(it)
                     adapter.notifyDataSetChanged()
+                    binding.cardView2.visibility=View.GONE
+                    progesssDialog.dismiss()
                 }
             }
         }

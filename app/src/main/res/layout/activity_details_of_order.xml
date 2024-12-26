@@ -563,21 +563,6 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:fontFamily="@font/poppins"
-                android:padding="0dp"
-                android:text="Status:"
-                android:textColor="#404393"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/cardView2"
-                app:layout_constraintEnd_toStartOf="@+id/cardView2"
-                app:layout_constraintTop_toTopOf="@+id/cardView2" />
-
-            <TextView
                 android:id="@+id/textView29"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -629,9 +614,9 @@
                 android:text="2024/12/8"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/textView"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView2"
                 app:layout_constraintStart_toEndOf="@+id/textView18"
-                app:layout_constraintTop_toTopOf="@+id/textView" />
+                app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
             <TextView
                 android:id="@+id/textView5"
