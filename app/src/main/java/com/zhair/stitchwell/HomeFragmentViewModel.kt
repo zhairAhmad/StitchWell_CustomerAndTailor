@@ -15,13 +15,6 @@ class HomeFragmentViewModel : ViewModel() {
     val failureMessage = MutableStateFlow<String?>(null)
     val data = MutableStateFlow<List<Order>?>(null)
 
-    init {
-//        readOrders()
-//        readHandcrafts
-
-    }
-
-
     fun readOrders() {
         viewModelScope.launch {
             orderRepository.getOrdersOfUser(MainActivity.user?.phone!!).catch {
@@ -43,14 +36,4 @@ class HomeFragmentViewModel : ViewModel() {
                 }
         }
     }
-//fun readHandcrafts() {
-//    viewModelScope.launch {
-//        orderRepository.getOrders().catch {
-//            failureMessage.value = it.message
-//        }
-//            .collect {
-//                data.value = it
-//            }
-//    }
-//}
 }
