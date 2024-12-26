@@ -2,6 +2,7 @@ package com.zhair.stitchwell
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -38,8 +39,10 @@ class Add_Order : AppCompatActivity() {
          }
          lifecycleScope.launch {
              viewModel.failureMessage.collect{
-                 if (it!=null)
-                     Toast.makeText(this@Add_Order,it,Toast.LENGTH_LONG).show()
+                 if (it!=null) {
+                     Toast.makeText(this@Add_Order, it, Toast.LENGTH_LONG).show()
+                     Log.i("AddOrder", it)
+                 }
              }
          }
          lifecycleScope.launch {
@@ -54,10 +57,19 @@ class Add_Order : AppCompatActivity() {
                  }
              }
          }
+
          binding.cancel.setOnClickListener(){
              finish()
          }
-
+         binding.saveBtn3.setOnClickListener{
+             val phone=binding.phone.editText?.text.toString()
+             if (phone.isNullOrEmpty() || phone.length < 11) {
+                 Toast.makeText(this, "Please Type Correct Phone", Toast.LENGTH_SHORT).show()
+             } else {
+                 Toast.makeText(this, "Getting Data", Toast.LENGTH_SHORT).show()
+                 viewModel.getMostRecent(phone)
+             }
+         }
          binding.saveBtn.setOnClickListener {
 //            val status = binding.namee.editText?.text.toString()
             val status = "Pending"
@@ -89,7 +101,7 @@ class Add_Order : AppCompatActivity() {
 
             // Create a Handcraft object with the entered data
              val order = Order()
-            order.status = status
+             order.status = status
              order.date= SimpleDateFormat("yyyy-MM-dd HH:mm a").format(System.currentTimeMillis())
              order.customInstr= customerIntra
              order.price = price
@@ -99,9 +111,28 @@ class Add_Order : AppCompatActivity() {
 
 
              viewModel.saveOrder(order)
-             // Save the Handcraft object (this would be a database operation, Firestore, etc.)
-             // For now, just display the success message
-             Toast.makeText(this, "Handcraft Added Successfully!", Toast.LENGTH_SHORT).show()
+//             Toast.makeText(this, "Order Saved Successfully!", Toast.LENGTH_SHORT).show()
+         }
+
+         lifecycleScope.launch {
+             viewModel.dataSize.collect{
+                 if(it!=null){
+                     binding.chestSize.editText?.setText(it.size!!.chest.toString())
+                     binding.shoulderSize.editText?.setText(it.size!!.shoulder.toString())
+                     binding.chestSize.editText?.setText(it.size!!.chest.toString())
+                     binding.sleeveLength.editText?.setText(it.size!!.sleeve.toString())
+                     binding.collerSize.editText?.setText(it.size!!.collar.toString())
+                     binding.waist.editText?.setText(it.size!!.waist.toString())
+                     binding.length.editText?.setText(it.size!!.length.toString())
+                     binding.cuff.editText?.setText(it.size!!.cuff.toString())
+                     binding.length1.editText?.setText(it.size!!.length1.toString())
+                     binding.bottom.editText?.setText(it.size!!.bottom.toString())
+                     binding.kunda.editText?.setText(it.size!!.kunda.toString())
+                     binding.legs.editText?.setText(it.size!!.legs.toString())
+                     binding.asan.editText?.setText(it.size!!.asan.toString())
+
+                 }
+             }
          }
      }
 

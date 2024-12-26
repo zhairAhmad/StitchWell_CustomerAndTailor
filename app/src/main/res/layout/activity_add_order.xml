@@ -150,8 +150,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toStartOf="@+id/saveBtn3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/Heading">
 
@@ -168,7 +168,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="@+id/phone"
+                    android:layout_marginEnd="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/phone"
                     app:layout_constraintTop_toBottomOf="@+id/phone">
 
@@ -370,6 +371,20 @@
                     android:text="Cancel"
                     app:layout_constraintBottom_toBottomOf="@+id/Heading"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+                <Button
+                    android:id="@+id/saveBtn3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="24dp"
+                    android:backgroundTint="#404393"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Search"
+                    android:textSize="16sp"
+                    app:cornerRadius="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/phone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/phone" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

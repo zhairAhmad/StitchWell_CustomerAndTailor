@@ -10,6 +10,7 @@ class AddOrderViewModel:ViewModel() {
     val isSaving = MutableStateFlow<Boolean>(false)
     val isSaved= MutableStateFlow<Boolean?>(null)
     val failureMessage = MutableStateFlow<String?>(null)
+    val dataSize = MutableStateFlow<Order?>(null)
 
 
     fun saveOrder(order: Order) {
@@ -25,4 +26,16 @@ class AddOrderViewModel:ViewModel() {
             }
         }
     }
+
+    fun  getMostRecent(phone:String){
+        viewModelScope.launch {
+            val result = OrdersRepository.getMostRecentOrderOfUser(phone)
+            if(result.isSuccess){
+                dataSize.value=result.getOrNull()
+            } else{
+                failureMessage.value = result.exceptionOrNull()?.message
+            }
+        }
+    }
+
 }
